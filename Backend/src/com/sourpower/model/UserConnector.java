@@ -26,7 +26,7 @@ public class UserConnector {
 	}
 	
 	public int create(String username, String password, String salt, String name, String email) throws SQLException {
-		if(createStatement == null) {
+		if(createStatement == null || createStatement.isClosed()) {
 			createStatement = SQLProvider.connect.prepareStatement("INSERT INTO `" + TABLE_NAME + "`(`" + COLUMN_USERNAME + "`, `" + COLUMN_PASSWORD + "`, `" + COLUMN_SALT + "`, `" + COLUMN_NAME + "`, `" + COLUMN_EMAIL + "`) VALUES(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 		}
 		
@@ -45,7 +45,7 @@ public class UserConnector {
 	}
 	
 	public ResultSet selectUserByUsername(String username) throws SQLException {
-		if(selectAuthStatement == null) {
+		if(selectAuthStatement == null || selectAuthStatement.isClosed()) {
 			selectAuthStatement = SQLProvider.connect.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE `" + COLUMN_USERNAME + "` = ?");
 		}
 		
@@ -55,7 +55,7 @@ public class UserConnector {
 	}
 	
 	public ResultSet selectUser(int userId) throws SQLException {
-		if(selectStatement == null) {
+		if(selectStatement == null || selectStatement.isClosed()) {
 			selectStatement = SQLProvider.connect.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE `" + COLUMN_ID + "` = ?");
 		}
 		

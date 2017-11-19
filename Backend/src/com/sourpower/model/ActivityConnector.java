@@ -25,7 +25,7 @@ public class ActivityConnector {
 	}
 	
 	public int create(String activityType, int score, String remarks, int userId) throws SQLException {
-		if(createStatement == null) {
+		if(createStatement == null || createStatement.isClosed()) {
 			createStatement = SQLProvider.connect.prepareStatement("INSERT INTO `" + TABLE_NAME + "`(`" + COLUMN_ACTIVITYTYPE + "`, `" + COLUMN_SCORE + "`, `" + COLUMN_REMARKS + "`, `" + COLUMN_USERID + "`) VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 		}
 		
@@ -40,7 +40,7 @@ public class ActivityConnector {
 	}
 	
 	public ResultSet select(int id) throws SQLException {
-		if(selectStatement == null) {
+		if(selectStatement == null || selectStatement.isClosed()) {
 			selectStatement = SQLProvider.connect.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE `" + COLUMN_ID + "` = ?");
 		}
 		
@@ -50,7 +50,7 @@ public class ActivityConnector {
 	}
 	
 	public ResultSet selectByType(String activityType) throws SQLException {
-		if(selectByTypeStatement == null) {
+		if(selectByTypeStatement == null || selectByTypeStatement.isClosed()) {
 			selectByTypeStatement = SQLProvider.connect.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE `" + COLUMN_ACTIVITYTYPE + "` = ?");
 		}
 		
