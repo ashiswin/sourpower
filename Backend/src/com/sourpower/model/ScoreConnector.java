@@ -25,7 +25,7 @@ public class ScoreConnector {
 	
 	public int create(int userId, int mentalWellness, int diet, int fitness, int academics) throws SQLException {
 		if(createStatement == null || createStatement.isClosed()) {
-			createStatement = SQLProvider.connect.prepareStatement("INSERT INTO `" + TABLE_NAME + "`(`" + COLUMN_USERID + "`, `" + COLUMN_MENTALWELLNESS + "`, `" + COLUMN_DIET + "`, `" + COLUMN_FITNESS + "`, `" + COLUMN_ACADEMICS + "`) VALUES(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+			createStatement = SQLProvider.connect.prepareStatement("INSERT INTO `" + TABLE_NAME + "`(`" + COLUMN_ID + "`, `" + COLUMN_MENTALWELLNESS + "`, `" + COLUMN_DIET + "`, `" + COLUMN_FITNESS + "`, `" + COLUMN_ACADEMICS + "`) VALUES(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 		}
 		
 		createStatement.setInt(1, userId);
