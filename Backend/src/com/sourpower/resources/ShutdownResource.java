@@ -6,7 +6,13 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
 public class ShutdownResource extends ServerResource {
-	@Post("json")
+	/*@Post("json")
+	public Representation shutdown(JsonRepresentation entity) {
+		System.exit(0);
+		return entity;
+	}*/
+	
+	@Post
 	public Representation shutdown(JsonRepresentation entity) {
 		System.exit(0);
 		return entity;
