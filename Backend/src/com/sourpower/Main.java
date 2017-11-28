@@ -40,7 +40,7 @@ public class Main extends Application {
         // attach your resource here
         router.attach("/user", UserResource.class);
         router.attach("/user/authenticate", AuthenticationResource.class);
-        //router.attach("/control/shutdown", ShutdownResource.class);
+        router.attach("/control/shutdown", ShutdownResource.class);
         // return the router.
         return router;
     }

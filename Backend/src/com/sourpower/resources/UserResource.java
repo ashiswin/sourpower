@@ -91,6 +91,8 @@ public class UserResource extends ServerResource {
 				 
 				 response.put("user", userObject);
 			 }
+			 
+			 System.out.println(response.toString());
 		 }
 		 catch (NumberFormatException e) {
 			 response.put("success", false);
