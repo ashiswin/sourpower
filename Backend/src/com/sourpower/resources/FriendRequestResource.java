@@ -1,5 +1,7 @@
 package com.sourpower.resources;
 
-public class FriendRequestResource {
+import org.restlet.resource.ServerResource;
+
+public class FriendRequestResource extends ServerResource {
 
 }
