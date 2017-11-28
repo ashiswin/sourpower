@@ -12,6 +12,7 @@ import org.restlet.routing.Router;
 import org.restlet.service.CorsService;
 
 import com.sourpower.resources.AuthenticationResource;
+import com.sourpower.resources.FriendResource;
 import com.sourpower.resources.ShutdownResource;
 import com.sourpower.resources.UserResource;
 
@@ -47,6 +48,7 @@ public class Main extends Application {
         Router router = new Router(getContext().createChildContext());
         // attach your resource here
         router.attach("/user", UserResource.class);
+        router.attach("/friend", FriendResource.class);
         router.attach("/user/authenticate", AuthenticationResource.class);
         router.attach("/control/shutdown", ShutdownResource.class);
         // return the router.
