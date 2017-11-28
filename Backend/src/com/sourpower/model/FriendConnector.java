@@ -4,15 +4,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.mysql.jdbc.Statement;
-
 public class FriendConnector {
 	public static PreparedStatement createStatement = null;
 	public static PreparedStatement selectStatement = null;
 	
 	public static final String TABLE_NAME = "friends";
-	public static final String COLUMN_FIRST = "username";
-	public static final String COLUMN_SECOND = "password";
+	public static final String COLUMN_FIRST = "first";
+	public static final String COLUMN_SECOND = "second";
 	
 	public FriendConnector() {
 		if(SQLProvider.connect == null) {

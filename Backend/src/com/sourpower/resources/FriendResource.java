@@ -11,7 +11,6 @@ import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
 import com.sourpower.model.FriendConnector;
-import com.sourpower.model.UserConnector;
 
 public class FriendResource extends ServerResource {
 	FriendConnector friendConnector;
