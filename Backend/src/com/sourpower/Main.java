@@ -1,11 +1,15 @@
 package com.sourpower;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Restlet;
 import org.restlet.data.Protocol;
 import org.restlet.routing.Router;
+import org.restlet.service.CorsService;
 
 import com.sourpower.resources.AuthenticationResource;
 import com.sourpower.resources.ShutdownResource;
@@ -28,6 +32,10 @@ public class Main extends Application {
 	// just your everyday chaining constructor
     public Main(Context context) {
         super(context);
+        CorsService corsService = new CorsService();         
+        corsService.setAllowedOrigins(new HashSet<String>(Arrays.asList("*")));
+        corsService.setAllowedCredentials(true);
+        getServices().add(corsService);
     }
 
     /** add hooks to your services - this will get called by the component when
