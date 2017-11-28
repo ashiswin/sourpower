@@ -52,7 +52,7 @@ public class Main extends Application {
         router.attach("/user", UserResource.class);
         router.attach("/friend", FriendResource.class);
         router.attach("/friend/request", FriendRequestResource.class);
-        router.attach("/activity", ActivityResource.class);
+        router.attach("/activit", ActivityResource.class);
         router.attach("/user/authenticate", AuthenticationResource.class);
         router.attach("/control/shutdown", ShutdownResource.class);
         // return the router.
