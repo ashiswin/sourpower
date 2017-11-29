@@ -42,7 +42,7 @@ public class UserSearchResource extends ServerResource {
 				 userArr.put(userObject);
 			 }
 			 
-			 response.put("user", userArr);
+			 response.put("users", userArr);
 			 
 			 System.out.println(response.toString());
 		 }
