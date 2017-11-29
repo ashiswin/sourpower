@@ -58,7 +58,7 @@ public class FriendRequestResource extends ServerResource {
     }
 	
 	@Post("json")
-	public Representation register(JsonRepresentation entity) {
+	public Representation sendRequest(JsonRepresentation entity) {
 		if(friendRequestConnector == null) {
 			 friendRequestConnector = new FriendRequestConnector();
 		}
