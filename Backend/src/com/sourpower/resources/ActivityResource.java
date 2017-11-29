@@ -13,9 +13,11 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
 import com.sourpower.model.ActivityConnector;
+import com.sourpower.model.ScoreConnector;
 
 public class ActivityResource extends ServerResource {
 	ActivityConnector activityConnector;
+	ScoreConnector scoreConnector;
 	
 	@Get
 	public Representation getActivities() {
@@ -97,6 +99,9 @@ public class ActivityResource extends ServerResource {
 		if(activityConnector == null) {
 			activityConnector = new ActivityConnector();
 		}
+		if(scoreConnector == null) {
+			scoreConnector = new ScoreConnector();
+		}
 		
 		JSONObject data = entity.getJsonObject();
 		
@@ -106,13 +111,24 @@ public class ActivityResource extends ServerResource {
 		int userId = data.getInt("userId");
 		
 		JSONObject response = new JSONObject();
+		
 		try {
-			if(activityConnector.create(activityType, score, remarks, userId) == 1) {
-				response.put("success", true);
+			ResultSet user = scoreConnector.select(userId);
+			
+			if(user.next()) {
+				if(activityConnector.create(activityType, score, remarks, userId) == 1) {
+					int newScore = user.getInt(activityType) + score;
+					scoreConnector.update(userId, activityType, newScore);
+					response.put("success", true);
+				}
+				else {
+					response.put("success", false);
+					response.put("message", "Unable to add activity");
+				}
 			}
 			else {
 				response.put("success", false);
-				response.put("message", "Unable to add activity");
+				response.put("message", "Unable to find user");
 			}
 		} catch (SQLException e) {
 			response.put("success", false);
