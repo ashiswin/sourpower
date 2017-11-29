@@ -57,10 +57,10 @@ public class UserConnector {
 	
 	public ResultSet selectUserSearch(String searchTerm) throws SQLException {
 		if(selectSearchStatement == null || selectAuthStatement.isClosed()) {
-			selectSearchStatement = SQLProvider.connect.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE `" + COLUMN_USERNAME + "` LIKE %?%");
+			selectSearchStatement = SQLProvider.connect.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE `" + COLUMN_USERNAME + "` LIKE ?");
 		}
 		
-		selectSearchStatement.setString(1, searchTerm);
+		selectSearchStatement.setString(1, "%" + searchTerm + "%");
 		
 		return selectSearchStatement.executeQuery();
 	}
