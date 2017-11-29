@@ -10,6 +10,7 @@ public class ActivityConnector {
 	public static PreparedStatement createStatement = null;
 	public static PreparedStatement selectStatement = null;
 	public static PreparedStatement selectByTypeStatement = null;
+	public static PreparedStatement selectByUserStatement = null;
 	
 	public static final String TABLE_NAME = "activities";
 	public static final String COLUMN_ID = "id";
@@ -57,5 +58,15 @@ public class ActivityConnector {
 		selectByTypeStatement.setString(1, activityType);
 		
 		return selectByTypeStatement.executeQuery();
+	}
+	
+	public ResultSet selectByUser(int userId) throws SQLException {
+		if(selectByUserStatement == null || selectByUserStatement.isClosed()) {
+			selectByUserStatement = SQLProvider.connect.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE `" + COLUMN_USERID + "` = ?");
+		}
+		
+		selectByUserStatement.setInt(1, userId);
+		
+		return selectByUserStatement.executeQuery();
 	}
 }
