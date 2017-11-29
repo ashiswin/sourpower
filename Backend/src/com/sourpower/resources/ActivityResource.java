@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
+import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
 import com.sourpower.model.ActivityConnector;
@@ -89,5 +90,36 @@ public class ActivityResource extends ServerResource {
 			
 			return new JsonRepresentation(response);
 		}
+	}
+	
+	@Post("json")
+	public Representation addActivity(JsonRepresentation entity) {
+		if(activityConnector == null) {
+			activityConnector = new ActivityConnector();
+		}
+		
+		JSONObject data = entity.getJsonObject();
+		
+		String activityType = data.getString("activityType");
+		String remarks = data.getString("remarks");
+		int score = data.getInt("score");
+		int userId = data.getInt("userId");
+		
+		JSONObject response = new JSONObject();
+		try {
+			if(activityConnector.create(activityType, score, remarks, userId) == 1) {
+				response.put("success", true);
+			}
+			else {
+				response.put("success", false);
+				response.put("message", "Unable to add activity");
+			}
+		} catch (SQLException e) {
+			response.put("success", false);
+			response.put("message", "SQLException occurred. Please check server logs for details.");
+			e.printStackTrace();
+		}
+		
+		return new JsonRepresentation(response);
 	}
 }
