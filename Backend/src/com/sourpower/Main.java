@@ -17,6 +17,7 @@ import com.sourpower.resources.FriendRequestResource;
 import com.sourpower.resources.FriendResource;
 import com.sourpower.resources.ShutdownResource;
 import com.sourpower.resources.UserResource;
+import com.sourpower.resources.UserSearchResource;
 
 public class Main extends Application {
 	public static void main(String[] args) throws Exception {
@@ -50,6 +51,7 @@ public class Main extends Application {
         Router router = new Router(getContext().createChildContext());
         // attach your resource here
         router.attach("/user", UserResource.class);
+        router.attach("/user/search", UserSearchResource.class);
         router.attach("/friend", FriendResource.class);
         router.attach("/friend/request", FriendRequestResource.class);
         router.attach("/activity", ActivityResource.class);

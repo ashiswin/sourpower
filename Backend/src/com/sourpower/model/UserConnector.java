@@ -10,6 +10,7 @@ public class UserConnector {
 	public static PreparedStatement createStatement = null;
 	public static PreparedStatement selectStatement = null;
 	public static PreparedStatement selectAuthStatement = null;
+	public static PreparedStatement selectSearchStatement = null;
 	
 	public static final String TABLE_NAME = "users";
 	public static final String COLUMN_ID = "id";
@@ -52,6 +53,16 @@ public class UserConnector {
 		selectAuthStatement.setString(1, username);
 		
 		return selectAuthStatement.executeQuery();
+	}
+	
+	public ResultSet selectUserSearch(String searchTerm) throws SQLException {
+		if(selectSearchStatement == null || selectAuthStatement.isClosed()) {
+			selectSearchStatement = SQLProvider.connect.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE `" + COLUMN_USERNAME + "` LIKE %?%");
+		}
+		
+		selectSearchStatement.setString(1, searchTerm);
+		
+		return selectSearchStatement.executeQuery();
 	}
 	
 	public ResultSet selectUser(int userId) throws SQLException {
