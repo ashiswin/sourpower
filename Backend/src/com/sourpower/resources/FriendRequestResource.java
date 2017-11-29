@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
+import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
 import com.sourpower.model.FriendConnector;
@@ -55,4 +56,35 @@ public class FriendRequestResource extends ServerResource {
 		 
          return new JsonRepresentation(response);
     }
+	
+	@Post("json")
+	public Representation register(JsonRepresentation entity) {
+		if(friendRequestConnector == null) {
+			 friendRequestConnector = new FriendRequestConnector();
+		}
+		
+		JSONObject data = entity.getJsonObject();
+		
+		int requester = data.getInt("userId");
+		int requestee = data.getInt("requestee");
+		
+		// TODO: Verify inputs, check if request had been sent before
+		
+		JSONObject response = new JSONObject();
+		try {
+			if(friendRequestConnector.create(requester, requestee) == 1) {
+				response.put("success", true);
+			}
+			else {
+				response.put("success", false);
+				response.put("message", "Unable to submit friend request");
+			}
+		} catch (SQLException e) {
+			response.put("success", false);
+			response.put("message", "SQLException occurred. Please check server logs for details.");
+			e.printStackTrace();
+		}
+		
+		return new JsonRepresentation(response);
+	}
 }
