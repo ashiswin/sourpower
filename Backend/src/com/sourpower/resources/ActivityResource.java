@@ -54,18 +54,23 @@ public class ActivityResource extends ServerResource {
 				
 				activities = activityConnector.select(activityId);
 				
-				activities.next();
-				
-				JSONObject activity = new JSONObject();
-				activity.put(ActivityConnector.COLUMN_ID, activities.getInt(ActivityConnector.COLUMN_ID));
-				activity.put(ActivityConnector.COLUMN_ACTIVITYTYPE, activities.getString(ActivityConnector.COLUMN_ACTIVITYTYPE));
-				activity.put(ActivityConnector.COLUMN_REMARKS, activities.getString(ActivityConnector.COLUMN_REMARKS));
-				activity.put(ActivityConnector.COLUMN_SCORE, activities.getInt(ActivityConnector.COLUMN_SCORE));
-				activity.put(ActivityConnector.COLUMN_USERID, activities.getInt(ActivityConnector.COLUMN_USERID));
-				
 				JSONObject response = new JSONObject();
-				response.put("success", true);
-				response.put("activity", activity);
+				
+				if(activities.next()) {
+					JSONObject activity = new JSONObject();
+					activity.put(ActivityConnector.COLUMN_ID, activities.getInt(ActivityConnector.COLUMN_ID));
+					activity.put(ActivityConnector.COLUMN_ACTIVITYTYPE, activities.getString(ActivityConnector.COLUMN_ACTIVITYTYPE));
+					activity.put(ActivityConnector.COLUMN_REMARKS, activities.getString(ActivityConnector.COLUMN_REMARKS));
+					activity.put(ActivityConnector.COLUMN_SCORE, activities.getInt(ActivityConnector.COLUMN_SCORE));
+					activity.put(ActivityConnector.COLUMN_USERID, activities.getInt(ActivityConnector.COLUMN_USERID));
+
+					response.put("success", true);
+					response.put("activity", activity);
+				}
+				else {
+					response.put("success", false);
+					response.put("message", "Activity not found");
+				}
 				
 				return new JsonRepresentation(response);
 			}
