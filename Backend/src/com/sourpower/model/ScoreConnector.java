@@ -64,11 +64,11 @@ public class ScoreConnector {
 	
 	public ResultSet selectTopOverall() throws SQLException {
 		if(selectTopOverallStatement == null || selectTopOverallStatement.isClosed()) {
-			selectTopOverallStatement = SQLProvider.connect.prepareStatement("SELECT TOP 10 `" + COLUMN_ID + "`, `" 
+			selectTopOverallStatement = SQLProvider.connect.prepareStatement("SELECT `" + COLUMN_ID + "`, `" 
 										+ COLUMN_MENTALWELLNESS + "`, `" + COLUMN_DIET + "`, `" + COLUMN_FITNESS + "`, `"
 										+ COLUMN_ACADEMICS + "`, (`" + COLUMN_MENTALWELLNESS + "` + `" + COLUMN_DIET
-										+ "` + `" + COLUMN_FITNESS + "` + `" + COLUMN_ACADEMICS + "`) AS TOTAL"
-										+ "FROM `" + TABLE_NAME + "` ORDER BY TOTAL DESC");
+										+ "` + `" + COLUMN_FITNESS + "` + `" + COLUMN_ACADEMICS + "`) AS TOTAL "
+										+ "FROM `" + TABLE_NAME + "` ORDER BY TOTAL DESC LIMIT 10");
 		}
 		
 		return selectTopOverallStatement.executeQuery();
