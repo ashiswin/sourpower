@@ -18,6 +18,7 @@ import com.sourpower.resources.FriendResource;
 import com.sourpower.resources.ShutdownResource;
 import com.sourpower.resources.UserResource;
 import com.sourpower.resources.UserSearchResource;
+import com.sourpower.resources.ScoreResource;
 
 public class Main extends Application {
 	public static void main(String[] args) throws Exception {
@@ -57,6 +58,7 @@ public class Main extends Application {
         router.attach("/activity", ActivityResource.class);
         router.attach("/user/authenticate", AuthenticationResource.class);
         router.attach("/control/shutdown", ShutdownResource.class);
+        router.attach("/score", ScoreResource.class);
         // return the router.
         return router;
     }
