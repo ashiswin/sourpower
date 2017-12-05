@@ -8,19 +8,24 @@ import org.json.JSONObject;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
+import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
 import com.sourpower.model.FriendConnector;
+import com.sourpower.model.FriendRequestConnector;
 import com.sourpower.model.UserConnector;
 
 public class FriendResource extends ServerResource {
 	FriendConnector friendConnector;
 	UserConnector userConnector;
+	FriendRequestConnector friendRequestConnector;
 	
 	@Get
     public Representation getFriends() {
 		 if(friendConnector == null) {
 			 friendConnector = new FriendConnector();
+		 }
+		 if(userConnector == null) {
 			 userConnector = new UserConnector();
 		 }
 		 
@@ -61,6 +66,39 @@ public class FriendResource extends ServerResource {
 			e.printStackTrace();
 		}
 		 
-         return new JsonRepresentation(response);
+        return new JsonRepresentation(response);
     }
+	
+	@Post("json")
+	public Representation acceptFriendRequest(JsonRepresentation entity) {
+		if(friendConnector == null) {
+			 friendConnector = new FriendConnector();
+		 }
+		 if(userConnector == null) {
+			 userConnector = new UserConnector();
+		 }
+		 if(friendRequestConnector == null) {
+			 friendRequestConnector = new FriendRequestConnector();
+		 }
+		 
+		 JSONObject data = entity.getJsonObject();
+		 int requester = data.getInt("userId");
+		 int requestee = data.getInt("requestee");
+		 
+		 JSONObject response = new JSONObject();
+		 
+		 try {
+			friendRequestConnector.delete(requester, requestee);
+			friendConnector.create(requester, requestee);
+			friendConnector.create(requestee, requester);
+			
+			response.put("success", true);
+		} catch (SQLException e) {
+			response.put("success", false);
+			response.put("message", "SQLException occurred. Please check server logs for details.");
+			e.printStackTrace();
+		}
+		 
+		return new JsonRepresentation(response);
+	}
 }

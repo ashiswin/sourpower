@@ -7,6 +7,7 @@ import java.sql.SQLException;
 public class FriendRequestConnector {
 	public static PreparedStatement createStatement = null;
 	public static PreparedStatement selectStatement = null;
+	public static PreparedStatement deleteStatement = null;
 	
 	public static final String TABLE_NAME = "friendrequests";
 	public static final String COLUMN_ID = "id";
@@ -41,5 +42,16 @@ public class FriendRequestConnector {
 		selectStatement.setInt(1, userId);
 		
 		return selectStatement.executeQuery();
+	}
+	
+	public int delete(int requester, int requestee) throws SQLException {
+		if(deleteStatement == null || deleteStatement.isClosed()) {
+			deleteStatement = SQLProvider.connect.prepareStatement("DELETE FROM `" + TABLE_NAME + "` WHERE " + COLUMN_REQUESTER + "=? AND `" + COLUMN_REQUESTEE + "`=?");
+		}
+		
+		deleteStatement.setInt(1, requester);
+		deleteStatement.setInt(2, requestee);
+		
+		return deleteStatement.executeUpdate();
 	}
 }
