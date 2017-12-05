@@ -82,8 +82,8 @@ public class FriendResource extends ServerResource {
 		 }
 		 
 		 JSONObject data = entity.getJsonObject();
-		 int requester = data.getInt("userId");
-		 int requestee = data.getInt("requestee");
+		 int requestee = data.getInt("userId");
+		 int requester = data.getInt("requestee");
 		 
 		 JSONObject response = new JSONObject();
 		 
