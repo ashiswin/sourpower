@@ -5,6 +5,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONObject;
 import org.restlet.ext.json.JsonRepresentation;
@@ -22,6 +24,14 @@ public class UserResource extends ServerResource {
 	private static UserConnector userConnector = null;
 	private static ScoreConnector scoreConnector = null;
 	private static AvatarConnector avatarConnector = null;
+	
+	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = 
+		Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+	public static boolean validate(String emailStr) {
+		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+		return matcher.find();
+	}
 	
 	@Post("json")
 	public Representation register(JsonRepresentation entity) {
@@ -42,11 +52,17 @@ public class UserResource extends ServerResource {
 		String name = data.getString("name");
 		String email = data.getString("email");
 		
-		// TODO: Verify inputs
-		
 		String salt = Util.getSaltString();
 		
 		JSONObject response = new JSONObject();
+		
+		// Verify inputs
+		if(!validate(email)) {
+			response.put("success", false);
+			response.put("message", "Email is invalid");
+				
+			return new JsonRepresentation(response);
+		}
 		
 		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
