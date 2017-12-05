@@ -35,10 +35,10 @@ public class ScoreResource extends ServerResource {
 				 
 				 JSONObject userObject = new JSONObject();
 				 userObject.put("id", user.getInt(ScoreConnector.COLUMN_ID));
-				 userObject.put("mentalWellness", user.getString(ScoreConnector.COLUMN_MENTALWELLNESS));
-				 userObject.put("diet", user.getString(ScoreConnector.COLUMN_DIET));
-				 userObject.put("fitness", user.getString(ScoreConnector.COLUMN_FITNESS));
-				 userObject.put("academics", user.getString(ScoreConnector.COLUMN_ACADEMICS));
+				 userObject.put("mentalWellness", user.getInt(ScoreConnector.COLUMN_MENTALWELLNESS));
+				 userObject.put("diet", user.getInt(ScoreConnector.COLUMN_DIET));
+				 userObject.put("fitness", user.getInt(ScoreConnector.COLUMN_FITNESS));
+				 userObject.put("academics", user.getInt(ScoreConnector.COLUMN_ACADEMICS));
 				 
 				 response.put("user", userObject);
 			 }
