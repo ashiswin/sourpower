@@ -67,7 +67,7 @@ public class ScoreConnector {
 			selectTopOverallStatement = SQLProvider.connect.prepareStatement("SELECT `" + COLUMN_ID + "`, `" 
 										+ COLUMN_MENTALWELLNESS + "`, `" + COLUMN_DIET + "`, `" + COLUMN_FITNESS + "`, `"
 										+ COLUMN_ACADEMICS + "`, (`" + COLUMN_MENTALWELLNESS + "` + `" + COLUMN_DIET
-										+ "` + `" + COLUMN_FITNESS + "` + `" + COLUMN_ACADEMICS + "`) AS TOTAL"
+										+ "` + `" + COLUMN_FITNESS + "` + `" + COLUMN_ACADEMICS + "`) AS TOTAL "
 										+ "FROM `" + TABLE_NAME + "` ORDER BY TOTAL DESC LIMIT 10");
 		}
 		
