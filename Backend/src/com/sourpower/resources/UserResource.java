@@ -14,12 +14,14 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
 import com.sourpower.Util;
+import com.sourpower.model.AvatarConnector;
 import com.sourpower.model.ScoreConnector;
 import com.sourpower.model.UserConnector;
 
 public class UserResource extends ServerResource {
 	private static UserConnector userConnector = null;
 	private static ScoreConnector scoreConnector = null;
+	private static AvatarConnector avatarConnector = null;
 	
 	@Post("json")
 	public Representation register(JsonRepresentation entity) {
@@ -28,6 +30,9 @@ public class UserResource extends ServerResource {
 		}
 		if(scoreConnector == null) {
 			scoreConnector = new ScoreConnector();
+		}
+		if(avatarConnector == null) {
+			avatarConnector = new AvatarConnector();
 		}
 		
 		JSONObject data = entity.getJsonObject();
@@ -50,6 +55,7 @@ public class UserResource extends ServerResource {
 			
 			int userId = userConnector.create(username, passwordHash, salt, name, email);
 			scoreConnector.create(userId, 0, 0, 0, 0);
+			avatarConnector.create(userId, 0, 0, 0, 0, 0);
 			
 			if(userId != -1) {
 				response.put("success", true);

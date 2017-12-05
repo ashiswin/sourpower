@@ -1,4 +1,5 @@
 package com.sourpower.resources;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -9,23 +10,23 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
+import com.sourpower.model.AvatarConnector;
 import com.sourpower.model.ScoreConnector;
 
-public class ScoreResource extends ServerResource {
-	private static ScoreConnector scoreConnector = null;
+public class AvatarResource extends ServerResource{
+	AvatarConnector avatarConnector;
 	
 	@Get
-	public Representation getUserScore() {
-		if (scoreConnector == null) {
-			scoreConnector = new ScoreConnector();
+	public Representation getUserAvatar() {
+		if(avatarConnector == null) {
+			avatarConnector = new AvatarConnector();
 		}
-		
 		JSONObject response = new JSONObject();
 		
 		try {
 			 int userId = Integer.parseInt(getQuery().getValues("userId"));
 			 
-			 ResultSet user = scoreConnector.select(userId);
+			 ResultSet user = avatarConnector.select(userId);
 			 if(!user.next()) {
 				 response.put("success", false);
 				 response.put("message", "User does not exist");
@@ -35,10 +36,11 @@ public class ScoreResource extends ServerResource {
 				 
 				 JSONObject userObject = new JSONObject();
 				 userObject.put("userId", user.getInt(ScoreConnector.COLUMN_ID));
-				 userObject.put("mentalWellness", user.getInt(ScoreConnector.COLUMN_MENTALWELLNESS));
-				 userObject.put("diet", user.getInt(ScoreConnector.COLUMN_DIET));
-				 userObject.put("fitness", user.getInt(ScoreConnector.COLUMN_FITNESS));
-				 userObject.put("academics", user.getInt(ScoreConnector.COLUMN_ACADEMICS));
+				 userObject.put("hat", user.getInt(AvatarConnector.COLUMN_HAT));
+				 userObject.put("top", user.getInt(AvatarConnector.COLUMN_TOP));
+				 userObject.put("bottom", user.getInt(AvatarConnector.COLUMN_MOUNT));
+				 userObject.put("shoes", user.getInt(AvatarConnector.COLUMN_SHOES));
+				 userObject.put("mount", user.getInt(AvatarConnector.COLUMN_MOUNT));
 				 
 				 response.put("user", userObject);
 			 }
@@ -55,23 +57,22 @@ public class ScoreResource extends ServerResource {
 			e.printStackTrace();
 		}
 		 
-        return new JsonRepresentation(response);
+       return new JsonRepresentation(response);
 	}
 	
 	@Post
-	public Representation updateUserScore( ) {
-		if (scoreConnector == null) {
-			scoreConnector = new ScoreConnector();
+	public Representation updateUserAvatar() {
+		if(avatarConnector == null) {
+			avatarConnector = new AvatarConnector();
 		}
-		
 		JSONObject response = new JSONObject();
 		
 		try {
 			int userId = Integer.parseInt(getQuery().getValues("userId"));
-			String activityType = getQuery().getValues("activityType");
-			int score = Integer.parseInt(getQuery().getValues("score"));
+			String itemType = getQuery().getValues("itemType");
+			int itemId = Integer.parseInt(getQuery().getValues("itemId"));
 			
-			int result = scoreConnector.update(userId, activityType, score);
+			int result = avatarConnector.update(userId, itemType, itemId);
 			if(result == 0) {
 				response.put("success", false);
 				response.put("message", "No rows updated. Check parameters");
@@ -91,5 +92,5 @@ public class ScoreResource extends ServerResource {
 		
 		return new JsonRepresentation(response);
 	}
-	
+
 }

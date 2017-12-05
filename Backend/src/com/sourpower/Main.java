@@ -13,6 +13,7 @@ import org.restlet.service.CorsService;
 
 import com.sourpower.resources.ActivityResource;
 import com.sourpower.resources.AuthenticationResource;
+import com.sourpower.resources.AvatarResource;
 import com.sourpower.resources.FriendRequestResource;
 import com.sourpower.resources.FriendResource;
 import com.sourpower.resources.ShutdownResource;
@@ -59,6 +60,7 @@ public class Main extends Application {
         router.attach("/user/authenticate", AuthenticationResource.class);
         router.attach("/control/shutdown", ShutdownResource.class);
         router.attach("/score", ScoreResource.class);
+        router.attach("/avatar", AvatarResource.class);
         // return the router.
         return router;
     }
