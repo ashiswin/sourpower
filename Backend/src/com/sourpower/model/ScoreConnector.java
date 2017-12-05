@@ -56,8 +56,8 @@ public class ScoreConnector {
 			updateStatement = SQLProvider.connect.prepareStatement("UPDATE `" + TABLE_NAME + "` SET `" + activityType + "` = ? WHERE `" + COLUMN_ID + "` = ?");
 		}
 		
-		updateStatement.setString(1, activityType);
-		updateStatement.setInt(2, score);
+		updateStatement.setInt(1, score);
+		updateStatement.setInt(2, userId);
 		
 		return updateStatement.executeUpdate();
 	}
