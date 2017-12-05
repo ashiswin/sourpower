@@ -16,6 +16,7 @@ import com.sourpower.resources.AuthenticationResource;
 import com.sourpower.resources.AvatarResource;
 import com.sourpower.resources.FriendRequestResource;
 import com.sourpower.resources.FriendResource;
+import com.sourpower.resources.LeaderBoardResource;
 import com.sourpower.resources.ShutdownResource;
 import com.sourpower.resources.UserResource;
 import com.sourpower.resources.UserSearchResource;
@@ -61,6 +62,7 @@ public class Main extends Application {
         router.attach("/control/shutdown", ShutdownResource.class);
         router.attach("/score", ScoreResource.class);
         router.attach("/avatar", AvatarResource.class);
+        router.attach("/leaderboard", LeaderBoardResource.class);
         // return the router.
         return router;
     }

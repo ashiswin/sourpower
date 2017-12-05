@@ -10,6 +10,7 @@ public class ScoreConnector {
 	public static PreparedStatement createStatement = null;
 	public static PreparedStatement selectStatement = null;
 	public static PreparedStatement updateStatement = null;
+	public static PreparedStatement selectTopOverallStatement = null;
 	
 	public static final String TABLE_NAME = "scores";
 	public static final String COLUMN_ID = "userId";
@@ -59,5 +60,17 @@ public class ScoreConnector {
 		updateStatement.setInt(2, score);
 		
 		return updateStatement.executeUpdate();
+	}
+	
+	public ResultSet selectTopOverall() throws SQLException {
+		if(selectTopOverallStatement == null || selectTopOverallStatement.isClosed()) {
+			selectTopOverallStatement = SQLProvider.connect.prepareStatement("SELECT TOP 10 `" + COLUMN_ID + "`, `" 
+										+ COLUMN_MENTALWELLNESS + "`, `" + COLUMN_DIET + "`, `" + COLUMN_FITNESS 
+										+ COLUMN_ACADEMICS + "`, (`" + COLUMN_MENTALWELLNESS + "` + `" + COLUMN_DIET
+										+ "` + `" + COLUMN_FITNESS + "` + `" + COLUMN_ACADEMICS + "`) AS TOTAL"
+										+ "FROM `" + TABLE_NAME + "` ORDER BY TOTAL DESC");
+		}
+		
+		return selectTopOverallStatement.executeQuery();
 	}
 }
