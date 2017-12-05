@@ -41,8 +41,8 @@ public class FriendRequestResource extends ServerResource {
 			 
 			 while(friends.next()) {
 				 JSONObject friend = new JSONObject();
-				 friend.put("id", friends.getInt(FriendConnector.COLUMN_SECOND));
-				 ResultSet user = userConnector.selectUser(friends.getInt(FriendConnector.COLUMN_SECOND));
+				 friend.put("id", friends.getInt(FriendRequestConnector.COLUMN_REQUESTER));
+				 ResultSet user = userConnector.selectUser(friends.getInt(FriendRequestConnector.COLUMN_REQUESTER));
 				 user.next();
 				 friend.put("name", user.getString(UserConnector.COLUMN_NAME));
 				 friend.put("username", user.getString(UserConnector.COLUMN_USERNAME));
