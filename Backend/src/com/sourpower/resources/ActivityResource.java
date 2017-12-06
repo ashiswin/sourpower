@@ -4,6 +4,7 @@ package com.sourpower.resources;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -20,8 +21,8 @@ import com.sourpower.model.ActivityConnector;
 
 public class ActivityResource extends ServerResource{
 	ActivityConnector activityConnector;
-	ScoreResource scoreResource;
-	private List<Observer> observers = new ArrayList<Observer>();
+	ScoreResource scoreResource = new ScoreResource();
+	private List<Observer> observers = Arrays.asList((Observer) scoreResource);
 	
 	@Get
 	public Representation getActivities() {
@@ -102,9 +103,6 @@ public class ActivityResource extends ServerResource{
 	public Representation addActivity(JsonRepresentation entity) {
 		if(activityConnector == null) {
 			activityConnector = new ActivityConnector();
-		}
-		if(scoreResource == null) {
-			scoreResource = new ScoreResource();
 		}
 		
 		JSONObject data = entity.getJsonObject();
