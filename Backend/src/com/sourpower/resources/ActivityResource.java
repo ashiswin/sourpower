@@ -122,7 +122,8 @@ public class ActivityResource extends ServerResource{
 		try {
 			if(activityConnector.create(activityType, score, remarks, userId) == 1) {
 				response.put("success", true);
-				this.broadcast(userId, activityType, score);
+				scoreResource.observerUpdate(userId, activityType, score);
+				//this.broadcast(userId, activityType, score);
 			}
 			else {
 				response.put("success", false);
