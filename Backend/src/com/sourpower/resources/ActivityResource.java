@@ -122,7 +122,6 @@ public class ActivityResource extends ServerResource{
 		try {
 			if(activityConnector.create(activityType, score, remarks, userId) == 1) {
 				response.put("success", true);
-				scoreResource.observerUpdate(userId, activityType, score);
 				this.broadcast(userId, activityType, score);
 			}
 			else {
@@ -141,8 +140,7 @@ public class ActivityResource extends ServerResource{
 	
 	public void broadcast(int userId, String activityType, int score) {
 		for(Observer observer:this.observers) {
-			JSONObject result = observer.observerUpdate(userId, activityType, score);
-			System.out.println(result.toString());
+			observer.observerUpdate(userId, activityType, score);
 		}
 	}
 
