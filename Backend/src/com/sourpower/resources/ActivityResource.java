@@ -15,12 +15,13 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
+import com.sourpower.DesignPatterns.Observer;
 import com.sourpower.model.ActivityConnector;
-import com.sourpower.model.ScoreConnector;
 
 public class ActivityResource extends ServerResource{
 	ActivityConnector activityConnector;
 	ScoreResource scoreResource;
+	private List<Observer> observers = new ArrayList<Observer>();
 	
 	@Get
 	public Representation getActivities() {
@@ -118,7 +119,7 @@ public class ActivityResource extends ServerResource{
 		try {
 			if(activityConnector.create(activityType, score, remarks, userId) >= 1) {
 				response.put("success", true);
-				scoreResource.observerUpdate(userId, activityType, score);
+				this.updateSubscribers(userId, activityType, score);
 			}
 			else {
 				response.put("success", false);
@@ -132,5 +133,15 @@ public class ActivityResource extends ServerResource{
 		}
 		
 		return new JsonRepresentation(response);
+	}
+	
+	public void subscribe(Observer observer) {
+		this.observers.add(observer);
+	}
+	
+	public void updateSubscribers(int userId, String activityType, int score) {
+		for(Observer observer: this.observers) {
+			observer.observerUpdate(userId, activityType, score);
+		}
 	}
 }

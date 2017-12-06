@@ -12,9 +12,10 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
+import com.sourpower.DesignPatterns.Observer;
 import com.sourpower.model.ScoreConnector;
 
-public class ScoreResource extends ServerResource {
+public class ScoreResource extends ServerResource implements Observer {
 	private static ScoreConnector scoreConnector = null;
 	private static final List<String> activityTypes = Arrays.asList("mentalWellness", "diet", "fitness", "academics");
 	
