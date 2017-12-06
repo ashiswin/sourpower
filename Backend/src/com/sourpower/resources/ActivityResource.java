@@ -140,7 +140,8 @@ public class ActivityResource extends ServerResource{
 	
 	public void broadcast(int userId, String activityType, int score) {
 		for(Observer observer:this.observers) {
-			observer.observerUpdate(userId, activityType, score);
+			JSONObject result = observer.observerUpdate(userId, activityType, score);
+			System.out.println(result.toString());
 		}
 	}
 

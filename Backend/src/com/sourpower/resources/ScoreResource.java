@@ -96,7 +96,7 @@ public class ScoreResource extends ServerResource implements Observer {
 		return new JsonRepresentation(response);
 	}
 
-	public Representation observerUpdate(int userId, String activityType, int score) {
+	public JSONObject observerUpdate(int userId, String activityType, int score) {
 		if (scoreConnector == null) {
 			scoreConnector = new ScoreConnector();
 		}
@@ -122,7 +122,7 @@ public class ScoreResource extends ServerResource implements Observer {
 			e.printStackTrace();
 		}
 		
-		return new JsonRepresentation(response);
+		return response;
 	}
 	
 	public static int calculateWeightedScore(String activityType, int score) {
