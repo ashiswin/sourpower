@@ -1,7 +1,10 @@
 package com.sourpower.resources;
 
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -12,12 +15,15 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
+import com.sourpower.DesignPatterns.Observer;
 import com.sourpower.model.ActivityConnector;
 import com.sourpower.model.ScoreConnector;
 
-public class ActivityResource extends ServerResource {
+public class ActivityResource extends ServerResource{
 	ActivityConnector activityConnector;
-	ScoreConnector scoreConnector;
+	ScoreResource scoreResource;
+	
+	private List<Observer> observers = new ArrayList<Observer>();
 	
 	@Get
 	public Representation getActivities() {
@@ -99,8 +105,9 @@ public class ActivityResource extends ServerResource {
 		if(activityConnector == null) {
 			activityConnector = new ActivityConnector();
 		}
-		if(scoreConnector == null) {
-			scoreConnector = new ScoreConnector();
+		if(scoreResource == null) {
+			scoreResource = new ScoreResource();
+			this.subscribe(scoreResource);
 		}
 		
 		JSONObject data = entity.getJsonObject();
@@ -113,23 +120,15 @@ public class ActivityResource extends ServerResource {
 		JSONObject response = new JSONObject();
 		
 		try {
-			ResultSet user = scoreConnector.select(userId);
-			
-			if(user.next()) {
-				if(activityConnector.create(activityType, score, remarks, userId) == 1) {
-					int newScore = user.getInt(activityType) + score;
-					scoreConnector.update(userId, activityType, newScore);
-					response.put("success", true);
-				}
-				else {
-					response.put("success", false);
-					response.put("message", "Unable to add activity");
-				}
+			if(activityConnector.create(activityType, score, remarks, userId) == 1) {
+				response.put("success", true);
+				this.broadcast(userId, activityType, score);
 			}
 			else {
 				response.put("success", false);
-				response.put("message", "Unable to find user");
+				response.put("message", "Unable to add activity");
 			}
+			
 		} catch (SQLException e) {
 			response.put("success", false);
 			response.put("message", "SQLException occurred. Please check server logs for details.");
@@ -137,5 +136,15 @@ public class ActivityResource extends ServerResource {
 		}
 		
 		return new JsonRepresentation(response);
+	}
+	
+	public void broadcast(int userId, String activityType, int score) {
+		for(Observer observer:this.observers) {
+			observer.observerUpdate(userId, activityType, score);
+		}
+	}
+
+	public void subscribe(Observer observer) {
+		this.observers.add(observer);
 	}
 }
