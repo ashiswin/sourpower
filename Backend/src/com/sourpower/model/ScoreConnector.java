@@ -52,10 +52,7 @@ public class ScoreConnector {
 	}
 	
 	public int update(int userId, String activityType, int score) throws SQLException {
-		if(updateStatement == null || updateStatement.isClosed()) {
-			updateStatement = SQLProvider.connect.prepareStatement("UPDATE `" + TABLE_NAME + "` SET `" + activityType + "` = ? WHERE `" + COLUMN_ID + "` = ?");
-		}
-		
+		updateStatement = SQLProvider.connect.prepareStatement("UPDATE `" + TABLE_NAME + "` SET `" + activityType + "` = ? WHERE `" + COLUMN_ID + "` = ?");
 		updateStatement.setInt(1, score);
 		updateStatement.setInt(2, userId);
 		
