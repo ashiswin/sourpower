@@ -107,7 +107,7 @@ public class ScoreResource extends ServerResource {
 			ResultSet user = scoreConnector.select(userId);
 			
 			if(user.next()) {
-				int newScore = user.getInt(activityType) + ScoreResource.calculateWeightedScore(activityType, score);
+				int newScore = user.getInt(activityType) + this.calculateWeightedScore(activityType, score);
 				scoreConnector.update(userId, activityType, newScore);
 			}
 			
@@ -125,7 +125,7 @@ public class ScoreResource extends ServerResource {
 		return new JsonRepresentation(response);
 	}
 	
-	public static int calculateWeightedScore(String activityType, int score) {
+	public int calculateWeightedScore(String activityType, int score) {
 		int index = activityTypes.indexOf(activityType);
 		switch(index) {
 		case 0:										// mentalWellness, comes in form of attendance
