@@ -1,5 +1,6 @@
 package com.sourpower.resources;
 import java.sql.ResultSet;
+
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
@@ -11,10 +12,9 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
-import com.sourpower.DesignPatterns.Observer;
 import com.sourpower.model.ScoreConnector;
 
-public class ScoreResource extends ServerResource implements Observer {
+public class ScoreResource extends ServerResource {
 	private static ScoreConnector scoreConnector = null;
 	private static final List<String> activityTypes = Arrays.asList("mentalWellness", "diet", "fitness", "academics");
 	
@@ -96,7 +96,7 @@ public class ScoreResource extends ServerResource implements Observer {
 		return new JsonRepresentation(response);
 	}
 
-	public JSONObject observerUpdate(int userId, String activityType, int score) {
+	public Representation observerUpdate(int userId, String activityType, int score) {
 		if (scoreConnector == null) {
 			scoreConnector = new ScoreConnector();
 		}
@@ -122,7 +122,7 @@ public class ScoreResource extends ServerResource implements Observer {
 			e.printStackTrace();
 		}
 		
-		return response;
+		return new JsonRepresentation(response);
 	}
 	
 	public static int calculateWeightedScore(String activityType, int score) {
