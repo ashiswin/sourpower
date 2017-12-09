@@ -42,10 +42,10 @@ public class UserResource extends ServerResource {
 			ResultSet result = userConnector.selectUserByUsername(username);
 			
 			if (!result.next()) {
-				return false;
+				return true;
 			}
 			else {
-				return true;
+				return false;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
