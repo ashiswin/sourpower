@@ -47,6 +47,7 @@ public class ActivityResource extends ServerResource{
 					activity.put(ActivityConnector.COLUMN_REMARKS, activities.getString(ActivityConnector.COLUMN_REMARKS));
 					activity.put(ActivityConnector.COLUMN_SCORE, activities.getInt(ActivityConnector.COLUMN_SCORE));
 					activity.put(ActivityConnector.COLUMN_USERID, activities.getInt(ActivityConnector.COLUMN_USERID));
+					activity.put(ActivityConnector.COLUMN_TIME, activities.getString(ActivityConnector.COLUMN_TIME));
 					
 					activityArr.put(activity);
 				}

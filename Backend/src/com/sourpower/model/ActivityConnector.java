@@ -18,6 +18,7 @@ public class ActivityConnector {
 	public static final String COLUMN_SCORE = "score";
 	public static final String COLUMN_REMARKS = "remarks";
 	public static final String COLUMN_USERID = "userId";
+	public static final String COLUMN_TIME ="timestamp";
 	
 	public ActivityConnector() {
 		if(SQLProvider.connect == null) {
@@ -62,7 +63,8 @@ public class ActivityConnector {
 	
 	public ResultSet selectByUser(int userId) throws SQLException {
 		if(selectByUserStatement == null || selectByUserStatement.isClosed()) {
-			selectByUserStatement = SQLProvider.connect.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE `" + COLUMN_USERID + "` = ?");
+			selectByUserStatement = SQLProvider.connect.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE `" + COLUMN_USERID + "` = ?"
+																		+ " ORDER BY `" + COLUMN_TIME + "` DESC LIMIT 10");
 		}
 		
 		selectByUserStatement.setInt(1, userId);
