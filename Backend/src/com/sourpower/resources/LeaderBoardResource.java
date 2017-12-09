@@ -42,6 +42,7 @@ public class LeaderBoardResource extends ServerResource{
 					JSONObject user = new JSONObject();
 					
 					ResultSet result = userConnector.selectUser(leaderboard.getInt(ScoreConnector.COLUMN_ID));
+					result.next();
 					String userName = result.getString(UserConnector.COLUMN_USERNAME);
 					
 					user.put("id", leaderboard.getInt(ScoreConnector.COLUMN_ID));
