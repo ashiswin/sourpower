@@ -64,18 +64,18 @@ public class ScoreResource extends ServerResource implements Observer {
 	}
 	
 	@Post
-	public Representation updateUserScore( ) {
+	public Representation updateUserScore(JsonRepresentation entity) {
 		if (scoreConnector == null) {
 			scoreConnector = new ScoreConnector();
 		}
 		
 		JSONObject response = new JSONObject();
+		JSONObject data = entity.getJsonObject();
+		int userId = data.getInt("userId");
+		String activityType = data.getString("activityType");
+		int score = data.getInt("score");
 		
 		try {
-			int userId = Integer.parseInt(getQuery().getValues("userId"));
-			String activityType = getQuery().getValues("activityType");
-			int score = Integer.parseInt(getQuery().getValues("score"));
-			
 			int result = scoreConnector.update(userId, activityType, score);
 			if(result == 0) {
 				response.put("success", false);
