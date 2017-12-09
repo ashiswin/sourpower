@@ -36,7 +36,7 @@ public class LeaderBoardResource extends ServerResource{
 				while(leaderboard.next()) {
 					JSONObject user = new JSONObject();
 					
-					user.put(ScoreConnector.COLUMN_ID, leaderboard.getInt(ScoreConnector.COLUMN_ID));
+					user.put("id", leaderboard.getInt(ScoreConnector.COLUMN_ID));
 					user.put(ScoreConnector.COLUMN_MENTALWELLNESS, leaderboard.getInt(ScoreConnector.COLUMN_MENTALWELLNESS));
 					user.put(ScoreConnector.COLUMN_DIET, leaderboard.getInt(ScoreConnector.COLUMN_DIET));
 					user.put(ScoreConnector.COLUMN_FITNESS, leaderboard.getInt(ScoreConnector.COLUMN_FITNESS));
