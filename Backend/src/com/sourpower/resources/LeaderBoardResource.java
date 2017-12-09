@@ -43,10 +43,10 @@ public class LeaderBoardResource extends ServerResource{
 					
 					ResultSet result = userConnector.selectUser(leaderboard.getInt(ScoreConnector.COLUMN_ID));
 					result.next();
-					String userName = result.getString(UserConnector.COLUMN_USERNAME);
+					String name = result.getString(UserConnector.COLUMN_NAME);
 					
 					user.put("id", leaderboard.getInt(ScoreConnector.COLUMN_ID));
-					user.put(UserConnector.COLUMN_USERNAME, userName);
+					user.put(UserConnector.COLUMN_NAME, name);
 					user.put(ScoreConnector.COLUMN_MENTALWELLNESS, leaderboard.getInt(ScoreConnector.COLUMN_MENTALWELLNESS));
 					user.put(ScoreConnector.COLUMN_DIET, leaderboard.getInt(ScoreConnector.COLUMN_DIET));
 					user.put(ScoreConnector.COLUMN_FITNESS, leaderboard.getInt(ScoreConnector.COLUMN_FITNESS));
