@@ -98,7 +98,7 @@ public class UserResource extends ServerResource {
 			
 			int userId = userConnector.create(username, passwordHash, salt, name, email);
 			scoreConnector.create(userId, 0, 0, 0, 0);
-			avatarConnector.create(userId, 1004997, 1012540, 1053208, 1071100, 1103033);
+			avatarConnector.create(userId, 1004997, 1012540, 1053208, 1071100, 0);
 			
 			if(userId != -1) {
 				response.put("success", true);
