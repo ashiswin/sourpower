@@ -13,11 +13,13 @@ import org.restlet.resource.ServerResource;
 
 import com.sourpower.model.FriendConnector;
 import com.sourpower.model.FriendRequestConnector;
+import com.sourpower.model.ScoreConnector;
 import com.sourpower.model.UserConnector;
 
 public class FriendResource extends ServerResource {
 	FriendConnector friendConnector;
 	UserConnector userConnector;
+	ScoreConnector scoreConnector;
 	FriendRequestConnector friendRequestConnector;
 	
 	@Get
@@ -27,6 +29,9 @@ public class FriendResource extends ServerResource {
 		 }
 		 if(userConnector == null) {
 			 userConnector = new UserConnector();
+		 }
+		 if(scoreConnector == null) {
+			 scoreConnector = new ScoreConnector();
 		 }
 		 
 		 JSONObject response = new JSONObject();
@@ -44,10 +49,12 @@ public class FriendResource extends ServerResource {
 				 JSONObject friend = new JSONObject();
 				 friend.put("id", friends.getInt(FriendConnector.COLUMN_SECOND));
 				 ResultSet user = userConnector.selectUser(friends.getInt(FriendConnector.COLUMN_SECOND));
+				 ResultSet score = scoreConnector.selectSum(friend.getInt(FriendConnector.COLUMN_SECOND));
 				 user.next();
 				 friend.put("name", user.getString(UserConnector.COLUMN_NAME));
 				 friend.put("username", user.getString(UserConnector.COLUMN_USERNAME));
 				 friend.put("email", user.getString(UserConnector.COLUMN_EMAIL));
+				 friend.put("score", score.getInt("TOTAL"));
 				 
 				 friendArr.put(friend);
 			 }
