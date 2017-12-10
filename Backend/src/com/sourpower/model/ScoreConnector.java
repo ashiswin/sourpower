@@ -10,6 +10,7 @@ public class ScoreConnector {
 	public static PreparedStatement createStatement = null;
 	public static PreparedStatement selectStatement = null;
 	public static PreparedStatement updateStatement = null;
+	public static PreparedStatement selectSumStatement = null;
 	public static PreparedStatement selectTopOverallStatement = null;
 	
 	public static final String TABLE_NAME = "scores";
@@ -49,6 +50,16 @@ public class ScoreConnector {
 		selectStatement.setInt(1, userId);
 		
 		return selectStatement.executeQuery();
+	}
+	
+	public ResultSet selectSum(int userId) throws SQLException {
+		if(selectSumStatement == null || selectSumStatement.isClosed()) {
+			selectSumStatement = SQLProvider.connect.prepareStatement("SELECT (`" + COLUMN_MENTALWELLNESS + "` + `" + COLUMN_DIET + "` + `" + COLUMN_FITNESS + "` + `" + COLUMN_ACADEMICS + "`) AS TOTAL FROM `" + TABLE_NAME + "` WHERE `" + COLUMN_ID + "` = ?");
+		}
+		
+		selectSumStatement.setInt(1, userId);
+		
+		return selectSumStatement.executeQuery();
 	}
 	
 	public int update(int userId, String activityType, int score) throws SQLException {
