@@ -54,7 +54,7 @@ public class ScoreConnector {
 	
 	public ResultSet selectSum(int userId) throws SQLException {
 		if(selectSumStatement == null || selectSumStatement.isClosed()) {
-			selectSumStatement = SQLProvider.connect.prepareStatement("SELECT (`" + COLUMN_MENTALWELLNESS + "` + `" + COLUMN_DIET + "` + `" + COLUMN_FITNESS + "` + `" + COLUMN_ACADEMICS + "`) AS TOTAL WHERE `" + COLUMN_ID + "` = ?");
+			selectSumStatement = SQLProvider.connect.prepareStatement("SELECT (`" + COLUMN_MENTALWELLNESS + "` + `" + COLUMN_DIET + "` + `" + COLUMN_FITNESS + "` + `" + COLUMN_ACADEMICS + "`) AS TOTAL FROM `" + TABLE_NAME + "` WHERE `" + COLUMN_ID + "` = ?");
 		}
 		
 		selectSumStatement.setInt(1, userId);
