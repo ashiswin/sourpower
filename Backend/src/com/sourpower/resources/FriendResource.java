@@ -49,7 +49,7 @@ public class FriendResource extends ServerResource {
 				 JSONObject friend = new JSONObject();
 				 friend.put("id", friends.getInt(FriendConnector.COLUMN_SECOND));
 				 ResultSet user = userConnector.selectUser(friends.getInt(FriendConnector.COLUMN_SECOND));
-				 ResultSet score = scoreConnector.selectSum(friend.getInt(FriendConnector.COLUMN_SECOND));
+				 ResultSet score = scoreConnector.selectSum(friends.getInt(FriendConnector.COLUMN_SECOND));
 				 user.next();
 				 friend.put("name", user.getString(UserConnector.COLUMN_NAME));
 				 friend.put("username", user.getString(UserConnector.COLUMN_USERNAME));
