@@ -51,6 +51,7 @@ public class FriendResource extends ServerResource {
 				 ResultSet user = userConnector.selectUser(friends.getInt(FriendConnector.COLUMN_SECOND));
 				 ResultSet score = scoreConnector.selectSum(friends.getInt(FriendConnector.COLUMN_SECOND));
 				 user.next();
+				 score.next();
 				 friend.put("name", user.getString(UserConnector.COLUMN_NAME));
 				 friend.put("username", user.getString(UserConnector.COLUMN_USERNAME));
 				 friend.put("email", user.getString(UserConnector.COLUMN_EMAIL));
