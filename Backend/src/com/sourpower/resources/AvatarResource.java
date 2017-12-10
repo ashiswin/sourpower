@@ -67,14 +67,15 @@ public class AvatarResource extends ServerResource{
 		}
 		JSONObject response = new JSONObject();
 		JSONObject data = entity.getJsonObject();
+		JSONObject user = data.getJSONObject("user");
 		
 		try {
-			int userId = data.getInt(AvatarConnector.COLUMN_ID);
-			int hat = data.getInt(AvatarConnector.COLUMN_HAT);
-			int top = data.getInt(AvatarConnector.COLUMN_TOP);
-			int bottom = data.getInt(AvatarConnector.COLUMN_BOTTOM);
-			int shoes = data.getInt(AvatarConnector.COLUMN_SHOES);
-			int mount = data.getInt(AvatarConnector.COLUMN_MOUNT);
+			int userId = user.getInt(AvatarConnector.COLUMN_ID);
+			int hat = user.getInt(AvatarConnector.COLUMN_HAT);
+			int top = user.getInt(AvatarConnector.COLUMN_TOP);
+			int bottom = user.getInt(AvatarConnector.COLUMN_BOTTOM);
+			int shoes = user.getInt(AvatarConnector.COLUMN_SHOES);
+			int mount = user.getInt(AvatarConnector.COLUMN_MOUNT);
 			
 			int result = avatarConnector.update(userId, hat, top, bottom, shoes, mount);
 			if(result == 0) {
