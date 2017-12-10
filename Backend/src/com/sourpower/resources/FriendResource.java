@@ -87,13 +87,18 @@ public class FriendResource extends ServerResource {
 		 
 		 JSONObject response = new JSONObject();
 		 
-		 // TODO: Check that requestee/requester pair exists in friend request table
 		 try {
-			friendRequestConnector.delete(requester, requestee);
-			friendConnector.create(requester, requestee);
-			friendConnector.create(requestee, requester);
-			
-			response.put("success", true);
+			ResultSet result = friendConnector.selectEdge(requester, requestee);
+			if (result.next()) {
+				response.put("success", false);
+				response.put("message", "Two users are already friends");
+			} else {
+				friendRequestConnector.delete(requester, requestee);
+				friendConnector.create(requester, requestee);
+				friendConnector.create(requestee, requester);
+				
+				response.put("success", true);
+			}
 		} catch (SQLException e) {
 			response.put("success", false);
 			response.put("message", "SQLException occurred. Please check server logs for details.");

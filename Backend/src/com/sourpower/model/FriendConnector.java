@@ -7,6 +7,7 @@ import java.sql.SQLException;
 public class FriendConnector {
 	public static PreparedStatement createStatement = null;
 	public static PreparedStatement selectStatement = null;
+	public static PreparedStatement selectEdgeStatement = null;
 	
 	public static final String TABLE_NAME = "friends";
 	public static final String COLUMN_FIRST = "first";
@@ -40,5 +41,17 @@ public class FriendConnector {
 		selectStatement.setInt(1, userId);
 		
 		return selectStatement.executeQuery();
+	}
+	
+	public ResultSet selectEdge(int first, int second) throws SQLException {
+		if(selectEdgeStatement == null) {
+			selectEdgeStatement = SQLProvider.connect.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE `" + COLUMN_FIRST + "` =? AND `"
+																	+ COLUMN_SECOND + "` =?");
+		}
+		
+		selectEdgeStatement.setInt(1, first);
+		selectEdgeStatement.setInt(2, second);
+		
+		return selectEdgeStatement.executeQuery();
 	}
 }
