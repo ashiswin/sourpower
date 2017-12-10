@@ -1,7 +1,11 @@
 package com.sourpower.resources;
 
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -12,12 +16,13 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
+import com.sourpower.DesignPatterns.Observer;
 import com.sourpower.model.ActivityConnector;
-import com.sourpower.model.ScoreConnector;
 
-public class ActivityResource extends ServerResource {
+public class ActivityResource extends ServerResource{
 	ActivityConnector activityConnector;
-	ScoreConnector scoreConnector;
+	ScoreResource scoreResource = new ScoreResource();
+	private List<Observer> observers = Arrays.asList((Observer) scoreResource);
 	
 	@Get
 	public Representation getActivities() {
@@ -42,6 +47,7 @@ public class ActivityResource extends ServerResource {
 					activity.put(ActivityConnector.COLUMN_REMARKS, activities.getString(ActivityConnector.COLUMN_REMARKS));
 					activity.put(ActivityConnector.COLUMN_SCORE, activities.getInt(ActivityConnector.COLUMN_SCORE));
 					activity.put(ActivityConnector.COLUMN_USERID, activities.getInt(ActivityConnector.COLUMN_USERID));
+					activity.put(ActivityConnector.COLUMN_TIME, activities.getString(ActivityConnector.COLUMN_TIME));
 					
 					activityArr.put(activity);
 				}
@@ -99,9 +105,6 @@ public class ActivityResource extends ServerResource {
 		if(activityConnector == null) {
 			activityConnector = new ActivityConnector();
 		}
-		if(scoreConnector == null) {
-			scoreConnector = new ScoreConnector();
-		}
 		
 		JSONObject data = entity.getJsonObject();
 		
@@ -113,23 +116,15 @@ public class ActivityResource extends ServerResource {
 		JSONObject response = new JSONObject();
 		
 		try {
-			ResultSet user = scoreConnector.select(userId);
-			
-			if(user.next()) {
-				if(activityConnector.create(activityType, score, remarks, userId) == 1) {
-					int newScore = user.getInt(activityType) + score;
-					scoreConnector.update(userId, activityType, newScore);
-					response.put("success", true);
-				}
-				else {
-					response.put("success", false);
-					response.put("message", "Unable to add activity");
-				}
+			if(activityConnector.create(activityType, score, remarks, userId) >= 1) {
+				response.put("success", true);
+				this.updateSubscribers(userId, activityType, score);
 			}
 			else {
 				response.put("success", false);
-				response.put("message", "Unable to find user");
+				response.put("message", "Unable to add activity");
 			}
+			
 		} catch (SQLException e) {
 			response.put("success", false);
 			response.put("message", "SQLException occurred. Please check server logs for details.");
@@ -137,5 +132,15 @@ public class ActivityResource extends ServerResource {
 		}
 		
 		return new JsonRepresentation(response);
+	}
+	
+	public void subscribe(Observer observer) {
+		this.observers.add(observer);
+	}
+	
+	public void updateSubscribers(int userId, String activityType, int score) {
+		for(Observer observer: this.observers) {
+			observer.observerUpdate(userId, activityType, score);
+		}
 	}
 }

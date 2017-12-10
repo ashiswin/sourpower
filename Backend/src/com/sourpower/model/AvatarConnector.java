@@ -55,13 +55,19 @@ public class AvatarConnector {
 		return selectStatement.executeQuery();
 	}
 	
-	public int update(int userId, String itemType, int itemId) throws SQLException {
+	public int update(int userId, int hat, int top, int bottom, int shoes, int mount) throws SQLException {
 		if(updateStatement == null || updateStatement.isClosed()) {
-			updateStatement = SQLProvider.connect.prepareStatement("UPDATE `" + TABLE_NAME + "` SET `" + itemType + "` = ? WHERE `" + COLUMN_ID + "` = ?");
+			updateStatement = SQLProvider.connect.prepareStatement("UPDATE `" + TABLE_NAME + "` SET `" + COLUMN_HAT + "`=?, `" 
+																+ COLUMN_TOP + "`=?, `" + COLUMN_BOTTOM + "`=?, `" + COLUMN_SHOES
+																+ "`=?, `" + COLUMN_MOUNT + "`=? WHERE `" + COLUMN_ID + "`=?");
 		}
 		
-		updateStatement.setString(1, itemType);
-		updateStatement.setInt(2, itemId);
+		updateStatement.setInt(1, hat);
+		updateStatement.setInt(2, top);
+		updateStatement.setInt(3, bottom);
+		updateStatement.setInt(4, shoes);
+		updateStatement.setInt(5, mount);
+		updateStatement.setInt(6, userId);
 		
 		return updateStatement.executeUpdate();
 	}

@@ -28,9 +28,29 @@ public class UserResource extends ServerResource {
 	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = 
 		Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
-	public static boolean validate(String emailStr) {
+	public static boolean validateEmail(String emailStr) {
 		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
 		return matcher.find();
+	}
+	
+	public static boolean validateUsername(String username) {
+		if (userConnector == null) {
+			userConnector = new UserConnector();
+		}
+		
+		try {
+			ResultSet result = userConnector.selectUserByUsername(username);
+			
+			if (!result.next()) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	@Post("json")
@@ -57,10 +77,17 @@ public class UserResource extends ServerResource {
 		JSONObject response = new JSONObject();
 		
 		// Verify inputs
-		if(!validate(email)) {
+		if(!validateEmail(email)) {
 			response.put("success", false);
 			response.put("message", "Email is invalid");
 				
+			return new JsonRepresentation(response);
+		}
+		
+		if(!validateUsername(username)) {
+			response.put("success", false);
+			response.put("message", "Username taken");
+			
 			return new JsonRepresentation(response);
 		}
 		
@@ -71,7 +98,7 @@ public class UserResource extends ServerResource {
 			
 			int userId = userConnector.create(username, passwordHash, salt, name, email);
 			scoreConnector.create(userId, 0, 0, 0, 0);
-			avatarConnector.create(userId, 0, 0, 0, 0, 0);
+			avatarConnector.create(userId, 1004997, 1012540, 1053208, 1071100, 1103033);
 			
 			if(userId != -1) {
 				response.put("success", true);

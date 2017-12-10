@@ -61,18 +61,23 @@ public class AvatarResource extends ServerResource{
 	}
 	
 	@Post
-	public Representation updateUserAvatar() {
+	public Representation updateUserAvatar(JsonRepresentation entity) {
 		if(avatarConnector == null) {
 			avatarConnector = new AvatarConnector();
 		}
 		JSONObject response = new JSONObject();
+		JSONObject data = entity.getJsonObject();
+		JSONObject user = data.getJSONObject("user");
 		
 		try {
-			int userId = Integer.parseInt(getQuery().getValues("userId"));
-			String itemType = getQuery().getValues("itemType");
-			int itemId = Integer.parseInt(getQuery().getValues("itemId"));
+			int userId = user.getInt(AvatarConnector.COLUMN_ID);
+			int hat = user.getInt(AvatarConnector.COLUMN_HAT);
+			int top = user.getInt(AvatarConnector.COLUMN_TOP);
+			int bottom = user.getInt(AvatarConnector.COLUMN_BOTTOM);
+			int shoes = user.getInt(AvatarConnector.COLUMN_SHOES);
+			int mount = user.getInt(AvatarConnector.COLUMN_MOUNT);
 			
-			int result = avatarConnector.update(userId, itemType, itemId);
+			int result = avatarConnector.update(userId, hat, top, bottom, shoes, mount);
 			if(result == 0) {
 				response.put("success", false);
 				response.put("message", "No rows updated. Check parameters");

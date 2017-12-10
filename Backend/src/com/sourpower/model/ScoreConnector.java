@@ -10,7 +10,6 @@ public class ScoreConnector {
 	public static PreparedStatement createStatement = null;
 	public static PreparedStatement selectStatement = null;
 	public static PreparedStatement updateStatement = null;
-	public static PreparedStatement selectSumStatement = null;
 	public static PreparedStatement selectTopOverallStatement = null;
 	
 	public static final String TABLE_NAME = "scores";
@@ -52,19 +51,10 @@ public class ScoreConnector {
 		return selectStatement.executeQuery();
 	}
 	
-	public ResultSet selectSum(int userId) throws SQLException {
-		if(selectSumStatement == null || selectSumStatement.isClosed()) {
-			
-		}
-	}
-	
 	public int update(int userId, String activityType, int score) throws SQLException {
-		if(updateStatement == null || updateStatement.isClosed()) {
-			updateStatement = SQLProvider.connect.prepareStatement("UPDATE `" + TABLE_NAME + "` SET `" + activityType + "` = ? WHERE `" + COLUMN_ID + "` = ?");
-		}
-		
-		updateStatement.setString(1, activityType);
-		updateStatement.setInt(2, score);
+		updateStatement = SQLProvider.connect.prepareStatement("UPDATE `" + TABLE_NAME + "` SET `" + activityType + "` = ? WHERE `" + COLUMN_ID + "` = ?");
+		updateStatement.setInt(1, score);
+		updateStatement.setInt(2, userId);
 		
 		return updateStatement.executeUpdate();
 	}

@@ -1,6 +1,9 @@
 package com.sourpower.resources;
 import java.sql.ResultSet;
+
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.json.JSONObject;
 import org.restlet.ext.json.JsonRepresentation;
@@ -9,10 +12,12 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
+import com.sourpower.DesignPatterns.Observer;
 import com.sourpower.model.ScoreConnector;
 
-public class ScoreResource extends ServerResource {
+public class ScoreResource extends ServerResource implements Observer {
 	private static ScoreConnector scoreConnector = null;
+	private static final List<String> activityTypes = Arrays.asList("mentalWellness", "diet", "fitness", "academics");
 	
 	@Get
 	public Representation getUserScore() {
@@ -59,18 +64,18 @@ public class ScoreResource extends ServerResource {
 	}
 	
 	@Post
-	public Representation updateUserScore( ) {
+	public Representation updateUserScore(JsonRepresentation entity) {
 		if (scoreConnector == null) {
 			scoreConnector = new ScoreConnector();
 		}
 		
 		JSONObject response = new JSONObject();
+		JSONObject data = entity.getJsonObject();
+		int userId = data.getInt("userId");
+		String activityType = data.getString("activityType");
+		int score = data.getInt("score");
 		
 		try {
-			int userId = Integer.parseInt(getQuery().getValues("userId"));
-			String activityType = getQuery().getValues("activityType");
-			int score = Integer.parseInt(getQuery().getValues("score"));
-			
 			int result = scoreConnector.update(userId, activityType, score);
 			if(result == 0) {
 				response.put("success", false);
@@ -90,6 +95,52 @@ public class ScoreResource extends ServerResource {
 		}
 		
 		return new JsonRepresentation(response);
+	}
+
+	public Representation observerUpdate(int userId, String activityType, int score) {
+		if (scoreConnector == null) {
+			scoreConnector = new ScoreConnector();
+		}
+		
+		JSONObject response = new JSONObject();
+		
+		try {
+			ResultSet user = scoreConnector.select(userId);
+			
+			if(user.next()) {
+				int newScore = user.getInt(activityType) + this.calculateWeightedScore(activityType, score);
+				scoreConnector.update(userId, activityType, newScore);
+			}
+			
+			else {
+				response.put("success", false);
+				response.put("message", "Unable to find user");
+			}
+			
+		} catch (SQLException e) {
+			response.put("success", false);
+			response.put("message", "SQLException occurred. Please check server logs for details.");
+			e.printStackTrace();
+		}
+		
+		return new JsonRepresentation(response);
+	}
+	
+	public int calculateWeightedScore(String activityType, int score) {
+		int index = activityTypes.indexOf(activityType);
+		switch(index) {
+		case 0:										// mentalWellness, comes in form of attendance
+			return score*10;
+		case 1:										// diet, comes in calories
+			double b = -Math.abs(score - 2600);
+			return (int) Math.round(10*Math.pow(Math.E, b));
+		case 2:										// fitness, comes in step count
+			return (int) Math.round(2*Math.log(score));
+		case 3:										// academics, comes in GPA
+			return (int) Math.round(100/5*score);
+		default:
+			return 0;
+		}
 	}
 	
 }
